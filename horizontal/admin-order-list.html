@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
@@ -13,6 +13,11 @@
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <script src="../config.js"></script>
 </head>
 
 <body class="fix-header card-no-border logo-center">
@@ -48,7 +53,7 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
-                                    <li><a href="deal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
+                                    <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
                                     <li role="separator" class="divider"></li>
@@ -74,7 +79,7 @@
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
-                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="deal-list.html"
+                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="meal-list.html"
                                 aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                                     class="hide-menu">餐品管理</span></a>
                         </li>
@@ -100,178 +105,8 @@
             </div>
         </aside>
         <div class="page-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list"
-                                    data-page-size="10">
-                                    <thead>
-                                        <tr>
-                                            <th class="xuhao">订单编号</th>
-                                            <th>订单时间</th>
-                                            <th>订单状态</th>
-                                            <th>总额</th>
-                                            <th>详细</th>
-                                            <th>处理</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="xuhao">01</td>
-                                            <td>2019-06-25 15:00:00</td>
-                                            <td>已处理</td>
-                                            <td>40</td>
-                                            <td>
-                                                <a href="">
-                                                <alt="user" class="img-circle" />详细信息</a>
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 处理</a>
-                                            </td>
-                                            
-                                        </tr>
-                                        <tr>
-                                                <td class="xuhao">02</td>
-                                                <td>2019-06-25 15:00:00</td>
-                                                <td>已处理</td>
-                                                <td>40</td>
-                                                <td>
-                                                    <a href="">
-                                                    <alt="user" class="img-circle" />详细信息</a>
-                                                </td>
-                                                <td>
-                                                    <a href="">
-                                                        <alt="user" class="img-circle" /> 处理</a>
-                                                </td>
-                                                
-                                        </tr>
-                                        <tr>
-                                                <td class="xuhao">03</td>
-                                                <td>2019-06-25 15:00:00</td>
-                                                <td>已处理</td>
-                                                <td>40</td>
-                                                <td>
-                                                    <a href="">
-                                                    <alt="user" class="img-circle" />详细信息</a>
-                                                </td>
-                                                <td>
-                                                    <a href="">
-                                                        <alt="user" class="img-circle" /> 处理</a>
-                                                </td>
-                                                
-                                        </tr>
-                                        <tr>
-                                                <td class="xuhao">04</td>
-                                                <td>2019-06-25 15:00:00</td>
-                                                <td>已处理</td>
-                                                <td>40</td>
-                                                <td>
-                                                    <a href="">
-                                                    <alt="user" class="img-circle" />详细信息</a>
-                                                </td>
-                                                <td>
-                                                    <a href="">
-                                                        <alt="user" class="img-circle" /> 处理</a>
-                                                </td>
-                                                
-                                        </tr>
-                                        <tr>
-                                                <td class="xuhao">5</td>
-                                                <td>2019-06-25 15:00:00</td>
-                                                <td>已处理</td>
-                                                <td>40</td>
-                                                <td>
-                                                    <a href="">
-                                                    <alt="user" class="img-circle" />详细信息</a>
-                                                </td>
-                                                <td>
-                                                    <a href="">
-                                                        <alt="user" class="img-circle" /> 处理</a>
-                                                </td>
-                                                
-                                        </tr>
-                                        <tr>
-                                                <td class="xuhao">06</td>
-                                                <td>2019-06-25 15:00:00</td>
-                                                <td>已处理</td>
-                                                <td>40</td>
-                                                <td>
-                                                    <a href="">
-                                                    <alt="user" class="img-circle" />详细信息</a>
-                                                </td>
-                                                <td>
-                                                    <a href="">
-                                                        <alt="user" class="img-circle" /> 处理</a>
-                                                </td>
-                                                
-                                        </tr>
-                                        <tr>
-                                                <td class="xuhao">07</td>
-                                                <td>2019-06-25 15:00:00</td>
-                                                <td>已处理</td>
-                                                <td>40</td>
-                                                <td>
-                                                    <a href="">
-                                                    <alt="user" class="img-circle" />详细信息</a>
-                                                </td>
-                                                <td>
-                                                    <a href="">
-                                                        <alt="user" class="img-circle" /> 处理</a>
-                                                </td>
-                                                
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="2">
-                                                <button type="button" class="btn btn-info btn-rounded"
-                                                    data-toggle="modal" data-target="#add-contact">查询</button>
-                                            </td>
-                                            <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog"
-                                                aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">查询</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <from class="form-horizontal form-material">
-                                                                <div class="form-group">
-                                                                    <div class="col-md-12 m-b-20">
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="订单编号"> </div>
-                                                                </div>
-                                                            </from>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-info waves-effect"
-                                                                data-dismiss="modal">确认</button>
-                                                            <button type="button" class="btn btn-default waves-effect"
-                                                                data-dismiss="modal">取消</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <td colspan="7">
-                                                <div class="text-right">
-                                                    <ul class="pagination"> </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <!-- .left-aside-column-->
-                        </div>
-                        <!-- /.left-right-aside-column-->
-                    </div>
-                </div>
-            </div>
+            <!-- 管理员管理订单信息的组件 -->
+            <div class="container-fluid" id="adminOrderList"></div>
         </div>
     </div>
     </div>
@@ -300,6 +135,144 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script type="text/babel">
+    function OrderItem(props){
+        const item = props.order
+        console.log(item)
+        return (
+            <tr>
+                <td className="xuhao">{item.id}</td>
+                <td>{item.orderTime}</td>
+                <td>{item.state}</td>
+                <td>{item.price}</td>
+                <td>
+                    <a href={item.detail} >详细信息 </a>
+                </td>
+            </tr>
+
+        )
+    }
+    class AdminOrderList extends React.Component{
+        constructor(props) {
+            super(props)
+            this.state = {
+                orders: [
+                {
+                    id: 1,
+                    orderTime: '2019-06-25 15:00:00',
+                    state: '已处理',
+                    price: '40',
+                    detail: 'admin-order.html'
+                },
+                {
+                    id: 2,
+                    orderTime: '2019-06-25 15:00:00',
+                    state: '已处理',
+                    price: '40',
+                    detail: 'admin-order.html'
+                },
+                {
+                    id: 3,
+                    orderTime: '2019-06-25 15:00:00',
+                    state: '已处理',
+                    price: '40',
+                    detail: 'admin-order.html'
+                },
+                {
+                    id: 4,
+                    orderTime: '2019-06-25 15:00:00',
+                    state: '已处理',
+                    price: '40',
+                    detail: 'admin-order.html'
+                }
+              ]
+            }
+
+        }
+       
+        render() {
+            return(
+                <div className="row">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="table-responsive">
+                                <table id="demo-foo-addrow" className="table m-t-30 table-hover contact-list"
+                                    data-page-size="10">
+                                    <thead>
+                                        <tr>
+                                            <th className="xuhao">订单编号</th>
+                                            <th>订单时间</th>
+                                            <th>订单状态</th>
+                                            <th>总额</th>
+                                            <th>详细</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            this.state.orders.map(item => 
+                                                <OrderItem 
+                                                order = {item}
+                                                key = {item.id}
+                                                />
+                                            )
+                                        }
+                                        
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <button type="button" className="btn btn-info btn-rounded"
+                                                    data-toggle="modal" data-target="#add-contact">查询</button>
+                                            </td>
+                                            <div id="add-contact" className="modal fade in" tabIndex="-1" role="dialog"
+                                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h4 className="modal-title" id="myModalLabel">查询</h4>
+                                                            <button type="button" className="close" data-dismiss="modal"
+                                                                aria-hidden="true">×</button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <form className="form-horizontal form-material">
+                                                                <div className="form-group">
+                                                                    <div className="col-md-12 m-b-20">
+                                                                        <input type="text" className="form-control"
+                                                                            placeholder="订单编号" /> </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-info waves-effect"
+                                                                data-dismiss="modal">确认</button>
+                                                            <button type="button" className="btn btn-default waves-effect"
+                                                                data-dismiss="modal">取消</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <td colSpan="7">
+                                                <div className="text-right">
+                                                    <ul className="pagination"> </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                           
+                        </div>
+                       
+                    </div>
+                </div>
+            )
+        }
+    }
+    ReactDOM.render (
+          <AdminOrderList />,
+          document.getElementById('adminOrderList')
+        )
+    </script>
 </body>
 
 </html>

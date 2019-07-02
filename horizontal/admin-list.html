@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
@@ -13,6 +13,11 @@
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <script src="../config.js"></script>
     <style>
         td {
             width: 35%;
@@ -55,7 +60,7 @@
                                     <li role="separator" class="divider"></li>
                                     <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
                                     </li>
-                                    <li><a href="deal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
+                                    <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a>
                                     </li>
@@ -82,7 +87,7 @@
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
-                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="deal-list.html"
+                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="meal-list.html"
                                 aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                                     class="hide-menu">餐品管理</span></a>
                         </li>
@@ -108,151 +113,8 @@
             </div>
         </aside>
         <div class="page-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div>
-                                用户名：<input type="text" placeholder="请输入用户名">
-                            <button type="button" class="btn btn-info btn-rounded">查询</button><br>
-                            <a href="add-admin.html"><button type="button"
-                                    class="btn btn-info btn-rounded">添加</button></a></div>
-                            
-
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list"
-                                    data-page-size="8">
-                                    <thead>
-                                        <tr>
-                                            <th class="xuhao">序号</th>
-                                            <th>用户名</th>
-                                            <th>操作</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="xuhao">01</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="xuhao">02</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>03</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>04</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>05</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>06</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>07</td>
-                                            <td>
-                                                张三
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除</a>
-                                            </td>
-
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="1"></td>
-                                            <td colspan="4">
-                                                <div class="text-right">
-                                                    <ul class="pagination"> </ul>
-                                                </div>
-                                            </td>
-
-                                            <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog"
-                                                aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">查询</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <from class="form-horizontal form-material">
-                                                                <div class="form-group">
-                                                                    <div class="col-md-12 m-b-20">
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="用户名"> </div>
-                                                                </div>
-                                                            </from>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-info waves-effect"
-                                                                data-dismiss="modal">确认</button>
-                                                            <button type="button" class="btn btn-default waves-effect"
-                                                                data-dismiss="modal">取消</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- 管理员列表组件 -->
+            <div class="container-fluid" id="adminList"></div>
         </div>
     </div>
     </div>
@@ -281,6 +143,166 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script type="text/babel">
+        // 显示每个管理人信息
+        function AdminItem (props) {
+          const item = props.admin
+          console.log (item)
+          return (
+            <tr>
+                <td className="xuhao">{item.id}</td>
+                <td>{item.name}</td>
+                <td>
+                 <a href= "">
+                    删除</a>
+                </td>
+            </tr>
+          )
+        }
+        // 显示所有管理员列表
+        class AdminList extends React.Component {
+          constructor(props) {
+            super(props)
+            this.state = {
+                id: '',
+                name:'',
+              admins: [
+                //   {
+                //     id: 1,
+                //     name: 'jane',
+                //     delete:"admin-list.html"
+                //   },
+                //   {
+                //     id: 2,
+                //     name: 'jane',
+                //     delete:"admin-list.html"
+                //   },
+                //   {
+                //     id: 3,
+                //     name: 'jane',
+                //     delete:"admin-list.html"
+                //   },
+                //   {
+                //     id: 4,
+                //     name: 'jane',
+                //     delete:"admin-list.html"
+                //   },
+                //   {
+                //     id: 5,
+                //     name: 'jane',
+                //     delete:"admin-list.html"
+                //   }
+              ]
+            }
+          }
+       
+          componentDidMount() {
+            // 获取管理员列表
+            const that = this;
+            $.ajax({
+               
+            type: 'POST',
+            url: global.targetUrl + 'manager/getusers',
+            headers: {
+                    token: localStorage.token 
+            },
+            data: {
+                state:1
+            },
+            success: function (res) {
+                console.log('返回的',res)
+                if (res.resultMsg.code === 1000) {
+                    that.setState({
+                        id : this.id,
+                        name : this.name
+
+                    })
+                }
+            }
+            })
+        }
+        render() {
+            return (
+                <div className="row">
+                    <div className="col-12">
+                        <div className="card">
+                            <div>
+                            <a href="add-admin.html"><button type="button"
+                                    className="btn btn-info btn-rounded">添加</button></a></div>
+                            
+
+                            <div className="table-responsive">
+                                <table id="demo-foo-addrow" className="table m-t-30 table-hover contact-list"
+                                    data-page-size="8">
+                                    <thead>
+                                        <tr>
+                                            <th className="xuhao">序号</th>
+                                            <th>用户名</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {
+                                                this.state.admins.map(item => 
+                                                    <AdminItem 
+                                                    admin = {item}
+                                                    key = {item.id}
+                                                    />
+                                                )
+                                            }
+                                        
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan="1"></td>
+                                            <td colSpan="4">
+                                                <div className="text-right">
+                                                    <ul className="pagination"> </ul>
+                                                </div>
+                                            </td>
+
+                                            <div id="add-contact" className="modal fade in" tabIndex="-1" role="dialog"
+                                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h4 className="modal-title" id="myModalLabel">查询</h4>
+                                                            <button type="button" className="close" data-dismiss="modal"
+                                                                aria-hidden="true">×</button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <form className="form-horizontal form-material">
+                                                                <div className="form-group">
+                                                                    <div className="col-md-12 m-b-20">
+                                                                        <input type="text" className="form-control"
+                                                                            placeholder="用户名" /> </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-info waves-effect"
+                                                                data-dismiss="modal">确认</button>
+                                                            <button type="button" className="btn btn-default waves-effect"
+                                                                data-dismiss="modal">取消</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+          }
+        }
+        ReactDOM.render (
+          <AdminList />,
+          document.getElementById('adminList')
+        )
+      </script>
 </body>
 
 </html>

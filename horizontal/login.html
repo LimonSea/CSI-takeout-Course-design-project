@@ -12,6 +12,7 @@
   <script src="../build/react.development.js"></script>
   <script src="../build/react-dom.development.js"></script>
   <script src="../build/babel.min.js"></script>
+  <script src="../config.js"></script>
 </head>
 
 <body>
@@ -58,7 +59,6 @@
   <script src="../assets/plugins/sparkline/jquery.sparkline.min.js"></script>
   <script src="js/custom.min.js"></script>
   <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
-  <script src="../config.js"></script>
   <script type="text/babel">
     class Input extends React.Component {
       constructor(props) {
@@ -77,15 +77,21 @@
       loginIn(event) {
         $.ajax({
           type: 'POST',
-          url: global.targetUrl,
+          url: global.targetUrl + 'login',
           data: {
-            'phone': this.state.phone,
+            'userphone': this.state.phone,
             'password': this.state.password
           },
           success: function (res) {
             console.log('返回的',res)
             if (res.resultMsg.code === 1000) {
-              location.href = "menu.html";
+              localStorage.setItem('token',res.bean.token)
+              localStorage.setItem('name',res.bean.user.name)
+              localStorage.setItem('icon',res.bean.user.icon)
+              localStorage.setItem('address',res.bean.user.address)
+              localStorage.setItem('state',res.bean.user.state)
+              localStorage.setItem('userid',res.bean.user.userid)
+              location.href = "menu.html"
             }
           }
         })

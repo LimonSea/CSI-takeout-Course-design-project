@@ -146,8 +146,12 @@
   <!-- react组件 -->
   <script type="text/babel">
     function GoodItem (props) {
-      const item = props.good
+      const item = props.meal
       console.log (item)
+      const addCart = () => {
+        let options = $("#num option:selected")
+        props.addCart(item.mealid, options.val())
+      }
       return (
         <tr>
           <td style={{width:'220px'}}>
@@ -155,10 +159,10 @@
           </td>
           <td>
             <ul>
-              <li>菜品：{item.goodname}</li>
-              <li>价格：{item.price}</li>
+              <li>菜品：{item.mealname}</li>
+              <li>价格：{item.mealprice}</li>
               <li>数量:
-                <select>
+                <select id="num">
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -166,7 +170,7 @@
                 </select>
                 <button type="button" className="btn btn-info btn-rounded"
                     data-toggle="modal"
-                    data-target="#add-contact">加入购物车</button>
+                    data-target="#add-contact" onClick={addCart}>加入购物车</button>
               </li>
             </ul>
           </td>
@@ -177,57 +181,73 @@
       constructor(props) {
         super(props)
         this.state = {
-          goods: [
-            {
-              id: 1,
-              goodname: '以前好吃的锅仔面',
-              style: '川菜',
-              price: '10',
-              num: 999,
-              imageUrl: 'img/01.jpg'
-            },
-            {
-              id: 2,
-              goodname: '以前好吃的锅仔面',
-              style: '湘菜',
-              price: '10',
-              num: 999,
-              imageUrl: 'img/01.jpg'
-            },
-            {
-              id: 3,
-              goodname: '以前好吃的锅仔面',
-              style: '粤菜',
-              price: '10',
-              num: 999,
-              imageUrl: 'img/01.jpg'
-            },
-            {
-              id: 4,
-              goodname: '以前好吃的锅仔面',
-              style: '鲁菜',
-              price: '10',
-              num: 999,
-              imageUrl: 'img/01.jpg'
-            },
-          ]
+          meals: []
         }
       }
+      addCart(id, num) {
+        // 加入购物车
+        $.ajax({
+          type: 'POST',
+          url: global.targetUrl + 'user/addcart',
+          headers: {
+            token: localStorage.token 
+          },
+          data: {
+            'mealid': id,
+            'count': num
+          },
+          success: function (res) {
+            console.log('加入购物车: ',res)
+            if (res.resultMsg.code === 1000) {
+              location.href = "cart-list.html"
+            }
+          }
+        })
+      }
       componentDidMount() {
+        console.log('token', localStorage.token)
+        const that = this
         // 获取商品列表
-        // $.ajax({
-        //   type: 'POST',
-        //   url: global.targetUrl,
-        //   data: {
-        //     ''
-        //   },
-        //   success: function (res) {
-        //     console.log('返回的',res)
-        //     if (res.resultMsg.code === 1000) {
-        //       location.href = "menu.html";
-        //     }
-        //   }
-        // })
+        $.ajax({
+          type: 'GET',
+          async: false,
+          url: global.targetUrl + 'getmeallist',
+          headers: {
+            token: localStorage.token 
+          },
+          data: {
+            'currentpage': 0
+          },
+          success: function (res) {
+            console.log('1: ',res)
+            if (res.resultMsg.code === 1000) {
+              let num = res.bean.totalpage
+              let meals = res.bean.pojo
+              for (let i = 1; i < num; i++) {
+                $.ajax({
+                  type: 'GET',
+                  async: false,
+                  url: global.targetUrl + 'getmeallist',
+                  headers: {
+                    token: localStorage.token 
+                  },
+                  data: {
+                    'currentpage': i
+                  },
+                  success: function (ress) {
+                    console.log('2: ', ress)
+                    if (ress.resultMsg.code === 1000) {
+                      meals = meals.concat(ress.bean.pojo)
+                    }
+                  }
+                })
+              }
+              that.setState({
+                meals: meals
+              })
+            }
+          }
+        })
       }
       render() {
         return (
@@ -240,10 +260,11 @@
               </thead>
               <tbody>
                 {
-                  this.state.goods.map(item => 
+                  this.state.meals.map(item => 
                     <GoodItem 
-                      good = {item}
-                      key = {item.id}
+                      meal = {item}
+                      key = {item.mealid}
+                      addCart = {this.addCart}
                     />
                   )
                 }
@@ -265,7 +286,7 @@
                               </div>
                           </div>
                       </div>
-                      <td colspan="5">
+                      <td colSpan="5">
                           <div className="text-right" style={{marginRight: '50%'}}>
                               <ul className="pagination"> </ul>
                           </div>

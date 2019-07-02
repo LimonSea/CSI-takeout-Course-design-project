@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
   <meta charset="utf-8">
@@ -9,6 +9,12 @@
   <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
   <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+  <!-- react -->
+  <script src="../build/react.development.js"></script>
+  <script src="../build/react-dom.development.js"></script>
+  <script src="../build/babel.min.js"></script>
+  <!-- 配置文件 -->
+  <script src="../config.js"></script>
 </head>
 
 <body>
@@ -20,7 +26,9 @@
     <div class="login-register" style="background-image:url(../assets/images/background/total4.jpg);">
       <div class="login-box card">
         <div class="card-body">
-          <form class="form-horizontal form-material" id="loginform" action="index.html">
+          <!-- 组件 -->
+          <div id="register"></div>
+          <!-- <form class="form-horizontal form-material" id="loginform" action="index.html">
             <h3 class="box-title m-b-20">注册</h3>
             <div class="form-group">
               <div class="col-xs-12">
@@ -56,7 +64,7 @@
                 <div>已有账号？ <a href="login.html" class="text-info m-l-5"><b>登录</b></a></div>
               </div>
             </div>
-          </form>
+          </form> -->
         </div>
       </div>
     </div>
@@ -71,6 +79,92 @@
   <script src="../assets/plugins/sparkline/jquery.sparkline.min.js"></script>
   <script src="js/custom.min.js"></script>
   <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+  <script type="text/babel">
+    class Register extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          phone: '',
+          password: '',
+          confirmPassword: '',
+        }
+        this.handleChange = this.handleChange.bind(this)
+        this.register = this.register.bind(this)
+      }
+      handleChange(event) {
+        this.setState({ [event.target.name]: event.target.value });
+        console.log(event.target.name, event.target.value)
+      }
+      register(event) {
+        console.log(this.state.confirmPassword === this.state.password)
+        if (this.state.confirmPassword === this.state.password) {
+          $.ajax({
+            type: 'POST',
+            url: global.targetUrl + 'register',
+            data: {
+              'userphone': this.state.phone,
+              'password': this.state.password
+            },
+            success: function (res) {
+              console.log('返回的',res)
+              if (res.resultMsg.code === 1000) {
+                location.href = "login.html"
+              }
+            }
+          })
+        }
+        console.log(global.targetUrl)
+      }
+      render() {
+        var phone = this.state.phone
+        var password = this.state.password
+        var confirmPassword = this.state.confirmPassword
+        return (
+          <div className="form-horizontal form-material" id="loginform">
+            <h3 className="box-title m-b-20">注册</h3>
+            <div className="form-group">
+              <div className="col-xs-12">
+                <input className="form-control" type="text" required="" placeholder="手机号" name="phone" value={phone} onChange={this.handleChange} />
+              </div>
+            </div>
+            <div className="form-group ">
+              <div className="col-xs-12">
+                <input className="form-control" type="password" required="" placeholder="密码" name="password" value={password} onChange={this.handleChange} />
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="col-xs-12">
+                <input className="form-control" type="password" required="" placeholder="确认密码" name="confirmPassword" value={confirmPassword} onChange={this.handleChange} />
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-md-12">
+                <div className="checkbox checkbox-success">
+                  <input id="checkbox-signup" type="checkbox"/>
+                  <label htmlFor="checkbox-signup"> 我同意此 <a href="#">协议</a></label>
+                </div>
+              </div>
+            </div>
+            <div className="form-group text-center m-t-20">
+              <div className="col-xs-12">
+                <button className="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
+                 onClick={this.register}>注册</button>
+              </div>
+            </div>
+            <div className="form-group m-b-0">
+              <div className="col-sm-12 text-center">
+                <div>已有账号？ <a href="login.html" className="text-info m-l-5"><b>登录</b></a></div>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    }
+    ReactDOM.render(
+      <Register />,
+      document.getElementById('register')
+    )
+  </script>
 </body>
 
 </html>

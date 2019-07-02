@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CSI餐厅小筑 外卖网</title>
     <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -14,6 +13,13 @@
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <!-- 配置文件 -->
+    <script src="../config.js"></script>
+
 </head>
 
 <body class="fix-header card-no-border logo-center">
@@ -22,9 +28,6 @@
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
     <div id="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-collapse">
@@ -48,10 +51,12 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
-                                    <li><a href="deal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
+                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
+                                    </li>
+                                    <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
+                                    <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a>
+                                    </li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="user-list.html"><i class="mdi mdi-account-star-variant"></i> 用户管理</a>
                                         <ul id>
@@ -75,7 +80,7 @@
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
-                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="deal-list.html"
+                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="meal-list.html"
                                 aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                                     class="hide-menu">餐品管理</span></a>
                         </li>
@@ -101,71 +106,93 @@
             </div>
         </aside>
         <div class="page-wrapper">
-                <div class="row page-titles">
-                        <div class="col-md-5 align-self-center">
-                            <h3 class="text-themecolor">菜系添加</h3>
-                        </div>
-                    </div>
-                    <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-10 ">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <form class="form-material m-t-20">
-                                                <div class="form-group">
-                                                    <label>菜系名称 <span class="help"></span></label>
-                                                    <input type="text" class="form-control form-control-line"> </div>
-                                            </form>
-                                            <div class="form-group">
-                                                <center><button onClick="myClick()" class="btn btn-success">提交</button>
-                                                    <button onClick="myClick()" class="btn btn-secondary">返回</button></center>
-                                            </div>
-                                        </div>
-                                    </div>
-            
-            
-                                </div>
-            
-            
-                                <!-- ============================================================== -->
-                                <!-- End Container fluid  -->
-                                <!-- ============================================================== -->
-                                <!-- ============================================================== -->
-                                <!-- footer -->
-                                <!-- ============================================================== -->
-            
-                                <!-- ============================================================== -->
-                                <!-- End footer -->
-                                <!-- ============================================================== -->
-                            </div>
-                        </div>
-    </div>
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-themecolor">菜系添加</h3>
+                </div>
+            </div>
+            <!--添加菜系-->
+            <div id="addmealtype"></div>
+        </div>
     </div>
     </div>
     <script src="../assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap tether Core JavaScript -->
     <script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
     <script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
     <script src="js/jquery.slimscroll.js"></script>
-    <!--Wave Effects -->
     <script src="js/waves.js"></script>
-    <!--Menu sidebar -->
     <script src="js/sidebarmenu.js"></script>
-    <!--stickey kit -->
     <script src="../assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
     <script src="../assets/plugins/sparkline/jquery.sparkline.min.js"></script>
-    <!--Custom JavaScript -->
     <script src="js/custom.min.js"></script>
-    <!-- Footable -->
     <script src="../assets/plugins/footable/js/footable.all.min.js"></script>
     <script src="../assets/plugins/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
-    <!--FooTable init-->
     <script src="js/footable-init.js"></script>
-    <!-- ============================================================== -->
-    <!-- Style switcher -->
-    <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script type="text/babel">
+        class Addmealtype extends React.Component {
+          constructor(props) {
+            super(props)
+            this.state = {
+              mealtype: ''
+            }
+            this.handleChange = this.handleChange.bind(this)
+            this.submit = this.submit.bind(this)
+          }
+          handleChange(event) {
+            this.setState({ [event.target.name]: event.target.value });
+            console.log(event.target.name, event.target.value)
+          }
+          submit(event) {
+            $.ajax({
+              type: 'POST',
+              url: global.targetUrl+'manager/addmealtype',
+              data: {
+                'typename': this.state.mealtype
+              },
+              headers:{
+                  token:localStorage.token 
+              },
+              success: function (res) {
+                console.log('返回的',res)
+                if (res.resultMsg.code === 1000) {
+                    alert("添加成功！");
+                    location.href = "menu.html";
+                }
+              }
+            })
+            console.log(global.targetUrl)
+          }
+          render() {
+            var mealtype = this.state.mealtype;
+            return (
+                <div className="container-fluid">
+                <div className="row">
+                    <div className="col-10 ">
+                        <div className="card">
+                            <div className="card-body">
+                                <form className="form-material m-t-20">
+                                    <div className="form-group">
+                                        <label>菜系名称 <span className="help"></span></label>
+                                        <input type="text" className="form-control form-control-line" name="mealtype" value={this.mealtype} onChange={this.handleChange}/> </div>
+                                </form>
+                                <div className="form-group">
+                                    <center><button onClick="myClick()" className="btn btn-success" onClick={this.submit}>提交</button>
+                                        <a href="style-cooking.html"><button className="btn btn-secondary">返回</button></a></center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            )
+          }
+        }
+        ReactDOM.render(
+          <Addmealtype />,
+          document.getElementById('addmealtype')
+        )
+      </script>
 </body>
 
 </html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +12,11 @@
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <script src="../config.js"></script>
 </head>
 
 <body class="fix-header card-no-border logo-center">
@@ -48,7 +52,7 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
-                                    <li><a href="deal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
+                                    <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
                                     <li role="separator" class="divider"></li>
@@ -74,7 +78,7 @@
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
-                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="deal-list.html"
+                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="meal-list.html"
                                 aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                                     class="hide-menu">餐品管理</span></a>
                         </li>
@@ -98,204 +102,10 @@
                 </nav>
             </div>
         </aside>
-        <div class="page-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list"
-                                    data-page-size="10">
-                                    <thead>
-                                        <tr>
-                                            <th>用户名</th>
-                                            <th>真实姓名</th>
-                                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电子邮箱</th>
-                                            <th>手机号码</th>
-                                            <th>送货地址</th>
-                                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>
-                                                王小华
-                                            </td>
-                                            <td>17706669555@qq.com</td>
-                                            <td>17706669555</td>
-                                            <td>辽宁省大连市</td>
-                                            <td>
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 编辑
-                                                </a>
-                                                &nbsp;
-                                                <a href="">
-                                                    <alt="user" class="img-circle" /> 删除
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="2">
-                                                <button type="button" class="btn btn-info btn-rounded"
-                                                    data-toggle="modal" data-target="#add-contact">查询</button>
-                                            </td>
-                                            <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog"
-                                                aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">查询</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <from class="form-horizontal form-material">
-                                                                <div class="form-group">
-                                                                    <div class="col-md-12 m-b-20">
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="用户名"> </div>
-                                                                </div>
-                                                            </from>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-info waves-effect"
-                                                                data-dismiss="modal">确认</button>
-                                                            <button type="button" class="btn btn-default waves-effect"
-                                                                data-dismiss="modal">取消</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <td colspan="7">
-                                                <div class="text-right">
-                                                    <ul class="pagination"> </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <!-- .left-aside-column-->
-                        </div>
-                        <!-- /.left-right-aside-column-->
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- 用户列表的组件 -->
+        <div class="page-wrapper" id="userList"></div>
     </div>
-    </div>
-    </div>
+
     <script src="../assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
@@ -320,6 +130,210 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script type="text/babel">
+    
+    
+        class UserList extends React.Component{
+            render(){
+                return (
+                    <div className="container-fluid">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="table-responsive">
+                                <table id="demo-foo-addrow" className="table m-t-30 table-hover contact-list"
+                                    data-page-size="10">
+                                    <thead>
+                                        <tr>
+                                            <th>用户名</th>
+                                            <th>真实姓名</th>
+                                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电子邮箱</th>
+                                            <th>手机号码</th>
+                                            <th>送货地址</th>
+                                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                     删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                     编辑
+                                                </a>
+                                                &nbsp;
+                                                <a href="">
+                                                     删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                     编辑
+                                                </a>
+                                                &nbsp;
+                                                <a href="">
+                                                     删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                     编辑
+                                                </a>
+                                                &nbsp;
+                                                <a href="">
+                                                     删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                     编辑
+                                                </a>
+                                                &nbsp;
+                                                <a href="">
+                                                     删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                    编辑
+                                                </a>
+                                                &nbsp;
+                                                <a href="">
+                                                     删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>
+                                                王小华
+                                            </td>
+                                            <td>17706669555@qq.com</td>
+                                            <td>17706669555</td>
+                                            <td>辽宁省大连市</td>
+                                            <td>
+                                                <a href="">
+                                                    编辑
+                                                </a>
+                                                &nbsp;
+                                                <a href="">
+                                                   删除
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan="2">
+                                                <button type="button" className="btn btn-info btn-rounded"
+                                                    data-toggle="modal" data-target="#add-contact">查询</button>
+                                            </td>
+                                            <div id="add-contact" className="modal fade in" tabIndex="-1" role="dialog"
+                                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h4 className="modal-title" id="myModalLabel">查询</h4>
+                                                            <button type="button" className="close" data-dismiss="modal"
+                                                                aria-hidden="true">×</button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <form className="form-horizontal form-material">
+                                                                <div className="form-group">
+                                                                    <div className="col-md-12 m-b-20">
+                                                                        <input type="text" className="form-control"
+                                                                            placeholder="用户名" /> </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-info waves-effect"
+                                                                data-dismiss="modal">确认</button>
+                                                            <button type="button" className="btn btn-default waves-effect"
+                                                                data-dismiss="modal">取消</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <td colSpan="7">
+                                                <div className="text-right">
+                                                    <ul className="pagination"> </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+                )
+            }
+        }
+    ReactDOM.render(
+        <UserList />,
+        document.getElementById('userList')
+    )
+    </script>
 </body>
 
 </html>

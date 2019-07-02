@@ -7,12 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CSI餐厅小筑 外卖网</title>
     <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
     <link href="../assets/plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
     <link href="../assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/plugins/dropify/dist/css/dropify.min.css">
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
 </head>
 
 <body class="fix-header card-no-border logo-center">
@@ -46,7 +52,7 @@
                                     <li role="separator" class="divider"></li>
                                     <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
                                     </li>
-                                    <li><a href="deal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
+                                    <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a>
                                     </li>
@@ -65,7 +71,6 @@
                 </div>
             </nav>
         </header>
-        <img style="width:100%; height:80%;" src="../assets/images/background/total4.jpg">
         <aside class="left-sidebar">
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
@@ -74,7 +79,7 @@
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
-                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="deal-list.html"
+                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="meal-list.html"
                                 aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                                     class="hide-menu">餐品管理</span></a>
                         </li>
@@ -99,6 +104,16 @@
                 </nav>
             </div>
         </aside>
+        <div className="page-wrapper">
+            <div className="row page-titles">
+                <div className="col-md-5 align-self-center">
+                    <h3 className="text-themecolor">菜品添加</h3>
+                </div>
+            </div>
+            <!--添加菜品窗口-->
+            <div id="addmeal"></div>
+        </div>
+    </div>
     </div>
     <script src="../assets/plugins/jquery/jquery.min.js"></script>
     <script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
@@ -109,11 +124,133 @@
     <script src="../assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
     <script src="../assets/plugins/sparkline/jquery.sparkline.min.js"></script>
     <script src="js/custom.min.js"></script>
-    <script src="../assets/plugins/skycons/skycons.js"></script>
-    <script src="../assets/plugins/chartist-js/dist/chartist.min.js"></script>
-    <script src="../assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
-    <script src="js/dashboard3.js"></script>
+    <script src="js/jasny-bootstrap.js"></script>
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    
+    <script src="../assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script>
+            $(document).ready(function () {
+                // Basic
+                $('.dropify').dropify();
+    
+                // Translated
+                $('.dropify-fr').dropify({
+                    messages: {
+                        default: 'Glissez-déposez un fichier ici ou cliquez',
+                        replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+                        remove: 'Supprimer',
+                        error: 'Désolé, le fichier trop volumineux'
+                    }
+                });
+    
+                // Used events
+                var drEvent = $('#input-file-events').dropify();
+    
+                drEvent.on('dropify.beforeClear', function (event, element) {
+                    return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+                });
+    
+                drEvent.on('dropify.afterClear', function (event, element) {
+                    alert('File deleted');
+                });
+    
+                drEvent.on('dropify.errors', function (event, element) {
+                    console.log('Has Errors');
+                });
+    
+                var drDestroy = $('#input-file-to-destroy').dropify();
+                drDestroy = drDestroy.data('dropify')
+                $('#toggleDropify').on('click', function (e) {
+                    e.preventDefault();
+                    if (drDestroy.isDropified()) {
+                        drDestroy.destroy();
+                    } else {
+                        drDestroy.init();
+                    }
+                })
+            });
+        </script>
+    <script src="../config.js"></script>
+    <script type="text/babel">
+    class Addmeal extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          typeid: '',
+          mealtype: '',
+          price:'',
+          mealphoto:''
+        }
+        this.handleChange = this.handleChange.bind(this)
+        this.submit = this.submit.bind(this)
+      }
+      handleChange(event) {
+        this.setState({ [event.target.name]: event.target.value });
+        console.log(event.target.name, event.target.value)
+      }
+      submit(event) {
+        $.ajax({
+          type: 'POST',
+          url: global.targetUrl+'manager/addmeal',
+          data: {
+            'typeid': this.state.mealtype,
+            'mealname': this.state.meal,
+            'price':this.state.price,
+            'mealphoto':this.state.mealphoto
+          },
+          success: function (res) {
+            console.log('返回的',res)
+            if (res.resultMsg.code === 1000) {
+              location.href = "menu.html";
+            }
+          }
+        })
+        console.log(global.targetUrl)
+      }
+      render() {
+        var meal = this.state.meal;
+        var mealtype = this.state.mealtype;
+        var price = this.state.price;
+        var mealphoto = this.state.mealphoto;
+        return (
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-body">
+                             <form className="form-material m-t-40">
+                                    <div className="form-group">
+                                        <label>菜系 <span className="help"></span></label>
+                                        <input type="text" className="form-control" name="mealtype" value={this.mealtype} onChange={this.handleChange}/> </div>
+                                    <div className="form-group">
+                                        <label>菜名 <span className="help"></span></label>
+                                        <input type="text" className="form-control form-control-line" name="meal" value={this.meal} onChange={this.handleChange}/> </div>
+                                    <div className="form-group">
+                                        <label>价格</label>
+                                        <input type="text" className="form-control"  name="price" value={this.price} onChange={this.handleChange}/> </div>
+                                    <div className="form-group">
+                                        <label>上传图片</label>
+                                        <input type="file" id="input-file-now" className="dropify" />
+                                        </div>
+                                </form>
+                                <div className="form-group">
+                                    <center><button onClick={this.submit} className="btn btn-success">提交</button>
+                                       <a href='meal-list.html'> <button className="btn btn-secondary">返回</button></a></center>
+                                </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+        )
+      }
+    }
+    ReactDOM.render(
+      <Addmeal />,
+      document.getElementById('addmeal')
+    )
+  </script>
+ 
 </body>
 
 </html>

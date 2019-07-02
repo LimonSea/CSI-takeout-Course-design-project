@@ -257,6 +257,10 @@
                                     <tfoot>
                                     </tfoot>
                                 </table> -->
+                                
+                                <!-- react组件 -->
+                                <div id="cartList"></div>
+
                                 <div class="form-group">
                                     <center><button onClick="myClick()" class="btn btn-success">提交</button>
                                 </div>
@@ -284,13 +288,13 @@
     <script src="js/footable-init.js"></script>
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
     <script type="text/babel">
-      class CartList extends React.Component {
-        construnctor(props) {
+      class CartList extends React.Component { 
+        constructor(props) {
           super(props)
           this.state = {
-            goods: [
+            carts: [
               {
-                id: 1,
+                cartid: 1,
                 goodname: '以前好吃的锅仔面',
                 style: '川菜',
                 price: '10',
@@ -298,7 +302,7 @@
                 imageUrl: 'img/01.jpg'
               },
               {
-                id: 2,
+                cartid: 2,
                 goodname: '以前好吃的锅仔面',
                 style: '湘菜',
                 price: '10',
@@ -306,7 +310,7 @@
                 imageUrl: 'img/01.jpg'
               },
               {
-                id: 3,
+                cartid: 3,
                 goodname: '以前好吃的锅仔面',
                 style: '粤菜',
                 price: '10',
@@ -314,7 +318,7 @@
                 imageUrl: 'img/01.jpg'
               },
               {
-                id: 4,
+                cartid: 4,
                 goodname: '以前好吃的锅仔面',
                 style: '鲁菜',
                 price: '10',
@@ -324,9 +328,28 @@
             ]
           }
         }
+        componentDidMount() {
+          // 获取商品列表
+          $.ajax({
+            type: 'POST',
+            url: global.targetUrl + 'user/getcartlist',
+            headers: {
+              token: localStorage.token 
+            },
+            data: {
+              'currentpage': 0
+            },
+            success: function (res) {
+              console.log('返回的',res)
+              if (res.resultMsg.code === 1000) {
+                // location.href = "menu.html";
+              }
+            }
+          })
+        }
         render() {
           return (
-            <table id="demo-foo-addrow" class="table m-t-30 table-hover contact-list"
+            <table id="demo-foo-addrow" className="table m-t-30 table-hover contact-list"
                 data-page-size="10">
                 <thead>
                     <tr>
@@ -339,159 +362,52 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            川菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            湘菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>
-                            粤菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>
-                            鲁菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>
-                            热菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>
-                            凉菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>
-                            浙菜
-                        </td>
-                        <td>
-                            回锅肉
-                        </td>
-                        <td>
-                            16
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            <button type="button"
-                                class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                data-toggle="tooltip" data-original-title="Delete"><i
-                                    class="ti-close" aria-hidden="true"></i></button>
-                        </td>
-                    </tr>
+                    {
+                      this.state.carts.map(item => 
+                        <CartItem 
+                          cart = {item}
+                          key = {item.cartid}
+                        />
+                      )
+                    }
                 </tbody>
                 <tfoot>
                 </tfoot>
             </table>
           )
         }
+      }
+      ReactDOM.render (
+        <CartList />,
+        document.getElementById('cartList')
+      )
+
+      function CartItem (props) {
+        const item = props.cart
+        console.log (item)
+        return (
+          <tr>
+              <td>{item.cartid}</td>
+              <td>
+                  {item.typename}
+              </td>
+              <td>
+                {item.mealname}
+              </td>
+              <td>
+                {item.mealprice}
+              </td>
+              <td>
+                  1
+              </td>
+              <td>
+                  <button type="button"
+                      className="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
+                      data-toggle="tooltip" data-original-title="Delete"><i
+                          className="ti-close" aria-hidden="true"></i></button>
+              </td>
+          </tr>
+        )
       }
     </script>
 </body>

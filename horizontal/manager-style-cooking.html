@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
@@ -13,6 +13,12 @@
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <!-- 配置文件 -->
+    <script src="../config.js"></script>
 </head>
 
 <body class="fix-header card-no-border logo-center">
@@ -45,7 +51,7 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
-                                    <li><a href="deal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
+                                    <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
                                     <li role="separator" class="divider"></li>
@@ -71,7 +77,7 @@
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
-                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="deal-list.html"
+                        <li class="three-column"> <a class="has-arrow waves-effect waves-dark" href="meal-list.html"
                                 aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                                     class="hide-menu">餐品管理</span></a>
                         </li>
@@ -106,33 +112,10 @@
                             <div class="row">
                                 <div class="col-10 ">
                                     <div class="card">
-                                        <div class="card-body">
-                                            <form class="form-material m-t-20">
-                                                <div class="form-group">
-                                                    <label>菜系名称 <span class="help"></span></label>
-                                                    <input type="text" class="form-control form-control-line"> </div>
-                                            </form>
-                                            <div class="form-group">
-                                                <center><button onClick="myClick()" class="btn btn-success">提交</button>
-                                                    <button onClick="myClick()" class="btn btn-secondary">返回</button></center>
-                                            </div>
-                                        </div>
+                                      <!-- 组件 -->
+                                      <div id="updateMealType"></div>
                                     </div>
-            
-            
                                 </div>
-            
-            
-                                <!-- ============================================================== -->
-                                <!-- End Container fluid  -->
-                                <!-- ============================================================== -->
-                                <!-- ============================================================== -->
-                                <!-- footer -->
-                                <!-- ============================================================== -->
-            
-                                <!-- ============================================================== -->
-                                <!-- End footer -->
-                                <!-- ============================================================== -->
                             </div>
                         </div>
     </div>
@@ -162,6 +145,65 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script type="text/babel">
+      class UpdateMealType extends React.Component {
+        constructor(props) {
+          super(props)
+          this.state = {
+            typename: ''
+          }
+          this.handleChange = this.handleChange.bind(this)
+          this.submitMealType = this.submitMealType.bind(this)
+        }
+        handleChange(event) {
+          this.setState({ [event.target.name]: event.target.value });
+          console.log(event.target.name, event.target.value)
+        }
+        submitMealType() {
+          $.ajax({
+            type: 'POST',
+            url: global.targetUrl + 'manager/updatemealtype',
+            headers: {
+              token: localStorage.token 
+            },
+            data: {
+              'typename': this.state.typename
+            },
+            success: function (res) {
+              console.log('返回的',res)
+              if (res.resultMsg.code === 1000) {
+                // location.href = "menu.html";
+              }
+            }
+          })
+        }
+        componentDidMount() {
+          console.log('token', localStorage.token)
+          // 获取菜品信息
+          // 应该从上一个页面传入
+        }
+        render() {
+          var typename = this.state.typename
+          return (
+            <div className="card-body">
+                <form className="form-material m-t-20">
+                    <div className="form-group">
+                        <label>菜系名称 <span className="help"></span></label>
+                        <input type="text" className="form-control form-control-line" name="typename" value={typename} onChange={this.handleChange}/> </div>
+                </form>
+                <div className="form-group">
+                    <center><button onClick={this.submitMealType} className="btn btn-success">提交</button>
+                        <a href="" className="btn btn-secondary">返回</a></center>
+                </div>
+            </div>
+          )
+        }
+      }
+      ReactDOM.render (
+        <UpdateMealType />,
+        document.getElementById('updateMealType')
+      )
+    </script>
 </body>
 
 </html>
