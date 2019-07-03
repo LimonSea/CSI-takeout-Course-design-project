@@ -169,8 +169,8 @@
             success: function (res) {
               console.log('返回的',res)
               if (res.resultMsg.code === 1000) {
-                // that.componentDidMount()
                 alert('下单成功')
+                location.href = "user-order-list.html"
               }
             }
           })

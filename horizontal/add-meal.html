@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
@@ -177,9 +177,8 @@
         super(props)
         this.state = {
           typeid: '',
-          mealtype: '',
-          price:'',
-          mealphoto:''
+          mealname: '',
+          mealprice:''
         }
         this.handleChange = this.handleChange.bind(this)
         this.submit = this.submit.bind(this)
@@ -192,26 +191,28 @@
         $.ajax({
           type: 'POST',
           url: global.targetUrl+'manager/addmeal',
+          headers: 
+          {
+             token: localStorage.token 
+          },
           data: {
-            'typeid': this.state.mealtype,
-            'mealname': this.state.meal,
-            'price':this.state.price,
-            'mealphoto':this.state.mealphoto
+            'typeid': this.state.typeid,
+            'mealname': this.state.mealname,
+            'mealprice':this.state.mealprice
           },
           success: function (res) {
             console.log('返回的',res)
             if (res.resultMsg.code === 1000) {
-              location.href = "menu.html";
+              alert('添加成功')
+              location.href = "meal-list.html";
             }
           }
         })
-        console.log(global.targetUrl)
       }
       render() {
-        var meal = this.state.meal;
-        var mealtype = this.state.mealtype;
-        var price = this.state.price;
-        var mealphoto = this.state.mealphoto;
+        var typeid = this.state.typeid;
+        var mealname = this.state.mealname;
+        var mealprice = this.state.mealprice;
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -221,17 +222,14 @@
                              <form className="form-material m-t-40">
                                     <div className="form-group">
                                         <label>菜系 <span className="help"></span></label>
-                                        <input type="text" className="form-control" name="mealtype" value={this.mealtype} onChange={this.handleChange}/> </div>
+                                        <input type="text" className="form-control" name="typeid" value={typeid} onChange={this.handleChange}/> </div>
                                     <div className="form-group">
                                         <label>菜名 <span className="help"></span></label>
-                                        <input type="text" className="form-control form-control-line" name="meal" value={this.meal} onChange={this.handleChange}/> </div>
+                                        <input type="text" className="form-control form-control-line" name="mealname" value={mealname} onChange={this.handleChange}/> </div>
                                     <div className="form-group">
                                         <label>价格</label>
-                                        <input type="text" className="form-control"  name="price" value={this.price} onChange={this.handleChange}/> </div>
-                                    <div className="form-group">
-                                        <label>上传图片</label>
-                                        <input type="file" id="input-file-now" className="dropify" />
-                                        </div>
+                                        <input type="text" className="form-control"  name="mealprice" value={mealprice} onChange={this.handleChange}/> </div>
+                                    
                                 </form>
                                 <div className="form-group">
                                     <center><button onClick={this.submit} className="btn btn-success">提交</button>

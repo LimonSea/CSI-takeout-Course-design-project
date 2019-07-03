@@ -197,7 +197,6 @@
                     },
                     data: {
                         'currentpage': 0,
-                        'mealstate':1
                        
                     },
                     success: function (res) {
@@ -215,8 +214,7 @@
                                         token: localStorage.token 
                                     },
                                     data: {
-                                        'currentpage': i,
-                                        'mealstate':1
+                                        'currentpage': i
                                     },
                                     success: function (ress) {
                                         console.log('分页 ', ress)
@@ -248,13 +246,14 @@
                 },
                 data: {
                     mealid:mealid,
-                    state:-1
+                    state:1
                 },
                 success: function (res) {
                     console.log('请求删除',res)
+                    console.log('mealstate:',res.bean.pojo[0].mealstate)
                     if (res.resultMsg.code === 1000) {
-                        alert('删除成功')
                         that.componentDidMount()
+                        alert('删除成功')
                     }
                 },
                 error:function(){
@@ -290,8 +289,8 @@
                                                         <td>{item.typename}</td>
                                                         <td>{item.mealname}</td>
                                                         <td>{item.mealprice}</td>
-                                                        <td ><a href={'manager-meal.html?mealid='+item.mealid+'&typename='+item.typename+'&mealname='+item.mealname+'&mealprice='+item.mealprice}> 编辑</a></td>
-                                                        <td><a href={'form-upload.html?mealid='+item.mealid}>上传</a></td>
+                                                        <td ><a href={'manager-meal.html?mealid='+item.mealid}> 编辑</a></td>
+                                                        <td><a href={item.file}>上传</a></td>
                                                         <td>
                                                             <button type="button" onClick={this.delete.bind(this, item.mealid)} className="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i className="ti-close" aria-hidden="true"></i></button>
                                                         </td>
@@ -305,8 +304,32 @@
                                     <tfoot>
                                         <tr>
                                             <td colSpan="2">
-                                                <a href='add-meal.html'><button type="button" className="btn btn-info btn-rounded" data-toggle="modal" data-target="#add-contact">添加</button></a>
+                                                <button type="button" className="btn btn-info btn-rounded" data-toggle="modal" data-target="#add-contact">查询</button>
                                             </td>
+                                            <div id="add-contact" className="modal fade in" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h4 className="modal-title" id="myModalLabel">查询</h4>
+                                                            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <form className="form-horizontal form-material">
+                                                                <div className="form-group">
+                                                                    <div className="col-md-12 m-b-20">
+                                                                        <input type="text" className="form-control" placeholder="序号" /> </div>
+                                                                    <div className="col-md-12 m-b-20">
+                                                                        <input type="text" className="form-control" placeholder="菜系名称" /> </div>  
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-info waves-effect" data-dismiss="modal">确认</button>
+                                                            <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">取消</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <td colSpan="7">
                                                 <div className="text-right">
                                                     <ul className="pagination"> </ul>

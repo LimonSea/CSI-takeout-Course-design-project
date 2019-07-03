@@ -201,6 +201,7 @@
                     success: function (res) {
                         console.log('请求删除',res)
                         if (res.resultMsg.code === 1000) {
+                            alert('删除成功')
                             that.componentDidMount()
                         }
                     },

@@ -216,7 +216,8 @@
             token: localStorage.token 
           },
           data: {
-            'currentpage': 0
+            'currentpage': 0,
+            'mealstate': 1
           },
           success: function (res) {
             console.log('1: ',res)
@@ -232,7 +233,8 @@
                     token: localStorage.token 
                   },
                   data: {
-                    'currentpage': i
+                    'currentpage': i,
+                    'mealstate': 1
                   },
                   success: function (ress) {
                     console.log('2: ', ress)
