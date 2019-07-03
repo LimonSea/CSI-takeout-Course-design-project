@@ -31,7 +31,7 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-collapse">
                     <div class="navbar-nav mr-auto mt-md-0">
-                        <div class="nav-item"> <a class="navbar-brand" href="admin.html"><img
+                        <div class="nav-item"> <a class="navbar-brand" href=" "><img
                                     src="../assets/images/logo.jpg" class="light-logo" alt="homepage" /></a> </div>
                     </div>
                     <ul class="navbar-nav my-lg-0">
@@ -50,7 +50,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
                                     <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
@@ -73,7 +73,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -86,7 +86,7 @@
                                     class="mdi mdi-cart-outline"></i><span class="hide-menu">订单管理</span></a>
                         </li>
                         <li class="nav-small-cap">FORMS, TABLE &amp; WIDGETS</li>
-                        <li class="two-column"> <a class="has-arrow waves-effect waves-dark" href="add-user.html"
+                        <li class="two-column"> <a class="has-arrow waves-effect waves-dark" href="add- "
                                 aria-expanded="false"><i class="mdi mdi-account-star-variant"></i><span
                                     class="hide-menu">用户管理</span></a>
                             <ul aria-expanded="false" class="collapse">
@@ -150,6 +150,7 @@
         constructor(props) {
           super(props)
           this.state = {
+            typeid:'',  
             typename: ''
           }
           this.handleChange = this.handleChange.bind(this)
@@ -167,20 +168,41 @@
               token: localStorage.token 
             },
             data: {
-              'typename': this.state.typename
+                'typeid':this.state.typeid,
+                'typename': this.state.typename
             },
             success: function (res) {
               console.log('返回的',res)
               if (res.resultMsg.code === 1000) {
-                // location.href = "menu.html";
+                    alert("修改成功！");
+                    location.href = "mealtype.html";
               }
             }
           })
         }
         componentDidMount() {
           console.log('token', localStorage.token)
-          // 获取菜品信息
-          // 应该从上一个页面传入
+          // 获取菜系信息
+          var strs;
+            var url = location.search;//获取url中“?”符后的字符串
+            if (url.indexOf('?') != -1) {
+                var str = url.substr(1);
+                strs = str.split('=');
+            }
+            var typeid = strs[1].substr(0,1)
+            
+            if (url.indexOf('&') != -1) {
+                var str = url.substr(1);
+                strs = str.split('=');
+            }
+            var typename = decodeURI(strs[2]);
+            this.setState({
+                typeid :typeid,
+                typename:typename
+            })
+            console.log('菜系ID：'+ typeid)
+            console.log('菜系名称：'+ typename)
+            
         }
         render() {
           var typename = this.state.typename
@@ -189,11 +211,11 @@
                 <form className="form-material m-t-20">
                     <div className="form-group">
                         <label>菜系名称 <span className="help"></span></label>
-                        <input type="text" className="form-control form-control-line" name="typename" value={typename} onChange={this.handleChange}/> </div>
+                        <input type="text" placeholder={typename} className="form-control form-control-line" name="typename" value={typename} onChange={this.handleChange}/> </div>
                 </form>
                 <div className="form-group">
                     <center><button onClick={this.submitMealType} className="btn btn-success">提交</button>
-                        <a href="" className="btn btn-secondary">返回</a></center>
+                        <a href="mealtype.html" ><button className="btn btn-secondary">返回</button></a></center>
                 </div>
             </div>
           )

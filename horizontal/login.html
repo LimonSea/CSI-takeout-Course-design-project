@@ -91,11 +91,18 @@
               localStorage.setItem('address',res.bean.user.address)
               localStorage.setItem('state',res.bean.user.state)
               localStorage.setItem('userid',res.bean.user.userid)
-              location.href = "menu.html"
+              if (res.bean.user.state === 1) {
+                location.href = "mealtype.html"
+              } else {
+                location.href = "menu.html"
+              }
             }
           }
         })
         console.log(global.targetUrl)
+      }
+      componentDidMount() {
+        localStorage.clear()
       }
       render() {
         var phone = this.state.phone;

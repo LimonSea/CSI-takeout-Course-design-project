@@ -14,6 +14,11 @@
     <link href="../assets/plugins/morrisjs/morris.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- react -->
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+    <script src="../config.js"></script>
 </head>
 
 
@@ -46,7 +51,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
                                     </li>
                                     <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
@@ -71,7 +76,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -103,7 +108,10 @@
         <div class="page-wrapper">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-body">
+
+                    <!-- 上传图片组件 -->
+                    <div id="uploadFile"></div>
+                    <!-- <div class="card-body">
                         <h4 class="card-title">上传图片</h4>
                         <input type="file" id="input-file-now" class="dropify" />
                         <div class="card-footer"style="align-self: auto;">
@@ -111,7 +119,7 @@
                             <button class="btn btn-success">提交图片</button>
                             <button class="btn btn-success">返回列表</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <footer class="footer">
@@ -185,6 +193,100 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script type="text/babel">
+      class UploadFile extends React.Component {
+        constructor(props) {
+          super(props)
+          this.state = {
+            file: '',
+            mealid: ''
+          }
+          this.handleFileChange = this.handleFileChange.bind(this)
+          this.confirmUpload = this.confirmUpload.bind(this)
+        }
+        handleFileChange(event) {
+          var that = this
+          let file = event.target.files[0]
+          console.log(file)
+          const formData = new FormData()
+          formData.append('file', file)   
+          if (file) {
+            $.ajax({
+              type: 'POST',
+              url: global.targetUrl + 'user/uploadfile',
+              headers: {
+                token: localStorage.token 
+              },
+              data: formData,
+              processData:false,
+              contentType: false,
+              success: function (res) {
+                console.log('返回的',res)
+                if (res.resultMsg.code === 1000) {
+                  // localStorage.setItem('userid',res.bean.user.userid)
+                  // location.href = "menu.html"
+                  that.setState({
+                    mealphoto: res.bean
+                  })
+                }
+              }
+            })
+          }
+        }
+        confirmUpload(event) {
+          $.ajax({
+            type: 'POST',
+            url: global.targetUrl + 'manager/updatemealphoto',
+            headers: {
+              token: localStorage.token 
+            },
+            data: {
+              mealid: this.state.mealid,
+              mealphoto: this.state.mealphoto
+            },
+            success: function (res) {
+              console.log('返回的',res)
+              if (res.resultMsg.code === 1000) {
+                alert('上传成功')
+                // localStorage.setItem('userid',res.bean.user.userid)
+                // location.href = "menu.html"
+              }
+            }
+          })
+        }
+        componentDidMount() {
+          let that = this
+          // 获取上个页面传递的参数
+          let url = location.search
+          let str, mealid
+          if (url.indexOf('?') !== -1) {
+            str = url.substr(1)
+            mealid = str.split('=')[1]
+          }
+          console.log('mealid:',mealid)
+          this.setState({
+            mealid: mealid
+          })
+        }
+        render() {
+          return (
+            <div className="card-body"> 
+                <h4 className="card-title">上传图片</h4>
+                <input type="file" id="input-file-now" className="dropify" onChange={this.handleFileChange}/>
+                <div className="card-footer">
+                    <button className="btn btn-success">更换图片</button>
+                    <button className="btn btn-success" style={{marginLeft: '20px'}} onClick={this.confirmUpload}>提交图片</button>
+                    <a href='meal-list.html'><button className="btn btn-success" style={{marginLeft: '20px'}}>返回列表</button></a>
+                </div>
+            </div>
+          )
+        }
+      }
+      ReactDOM.render(
+        <UploadFile />,
+        document.getElementById('uploadFile')
+      )
+    </script>
 </body>
 
 </html>

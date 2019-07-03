@@ -58,7 +58,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a>
                                     </li>
                                     <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
@@ -83,7 +83,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -144,91 +144,95 @@
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
     <script type="text/babel">
-        // 显示每个管理人信息
-        function AdminItem (props) {
-          const item = props.admin
-          console.log (item)
-          return (
-            <tr>
-                <td className="xuhao">{item.id}</td>
-                <td>{item.name}</td>
-                <td>
-                 <a href= "">
-                    删除</a>
-                </td>
-            </tr>
-          )
-        }
         // 显示所有管理员列表
         class AdminList extends React.Component {
           constructor(props) {
             super(props)
             this.state = {
-                id: '',
-                name:'',
-              admins: [
-                //   {
-                //     id: 1,
-                //     name: 'jane',
-                //     delete:"admin-list.html"
-                //   },
-                //   {
-                //     id: 2,
-                //     name: 'jane',
-                //     delete:"admin-list.html"
-                //   },
-                //   {
-                //     id: 3,
-                //     name: 'jane',
-                //     delete:"admin-list.html"
-                //   },
-                //   {
-                //     id: 4,
-                //     name: 'jane',
-                //     delete:"admin-list.html"
-                //   },
-                //   {
-                //     id: 5,
-                //     name: 'jane',
-                //     delete:"admin-list.html"
-                //   }
-              ]
+              admins: []
             }
-          }
-       
-          componentDidMount() {
-            // 获取管理员列表
+        }
+        componentDidMount() {
+                // 获取用户列表
+                const that = this
+                $.ajax({
+                    type: 'GET',
+                    async: false,
+                    url: global.targetUrl + 'manager/getusers',
+                    headers: {
+                        token: localStorage.token 
+                    },
+                    data: {
+                        'currentpage': 0,
+                        state:1
+                    },
+                    success: function (res) {
+                        console.log('返回的',res)
+                        if (res.resultMsg.code === 1000) {
+                            let num = res.bean.totalpage
+                            let admins = res.bean.pojo
+                            for (let i = 1; i < num; i++) {
+                                $.ajax({
+                                    type: 'GET',
+                                    async: false,
+                                    url: global.targetUrl + 'manager/getusers',
+                                    headers: {
+                                        token: localStorage.token 
+                                    },
+                                    data: {
+                                        'currentpage': i
+                                    },
+                                    success: function (ress) {
+                                        console.log('分页 ', ress)
+                                        if (ress.resultMsg.code === 1000) {
+                                            admins = admins.concat(ress.bean.pojo)
+                                        }
+                                    }
+                                })
+                            }
+                            that.setState({
+                                admins: admins
+                            })
+                        }
+                    }
+                })
+
+        }
+        delete (userid){
+            console.log('userid:',userid)
+            // 根据userid删除管理员
             const that = this;
             $.ajax({
-               
-            type: 'POST',
-            url: global.targetUrl + 'manager/getusers',
-            headers: {
+                type: 'POST',
+                url: global.targetUrl + 'manager/banuser',
+                headers: {
                     token: localStorage.token 
-            },
-            data: {
-                state:1
-            },
-            success: function (res) {
-                console.log('返回的',res)
-                if (res.resultMsg.code === 1000) {
-                    that.setState({
-                        id : this.id,
-                        name : this.name
-
-                    })
+                },
+                data: {
+                    userid:userid
+                },
+                success: function (res) {
+                    console.log('请求删除',res)
+                    if (res.resultMsg.code === 1000) {
+                        that.componentDidMount()
+                        alert('删除成功')
+                    }
+                },
+                error:function(){
+                    console.log("接收失败！")
                 }
-            }
             })
+
         }
         render() {
             return (
                 <div className="row">
                     <div className="col-12">
                         <div className="card">
-                            <div>
+                            <div style={{margin:'5px 20px'}}>
                             <a href="add-admin.html"><button type="button"
-                                    className="btn btn-info btn-rounded">添加</button></a></div>
+                                    className="btn btn-info btn-rounded">添加</button></a>
+                            </div>
                             
 
                             <div className="table-responsive">
@@ -243,11 +247,21 @@
                                     </thead>
                                     <tbody>
                                             {
-                                                this.state.admins.map(item => 
-                                                    <AdminItem 
-                                                    admin = {item}
-                                                    key = {item.id}
-                                                    />
+                                                this.state.admins.map(item => {
+                                                    return (
+                                                        <tr key={item.userid}>
+                                                            <td className="xuhao">{item.userid}</td>
+                                                            <td>{item.name}</td>
+                                                            <td>
+                                                            <a onClick={this.delete.bind(this, item.userid)} >
+                                                                删除</a>
+                                                            </td>
+                                                        </tr>
+
+                                                    )
+                                                    
+                                                }
+                                               
                                                 )
                                             }
                                         
@@ -260,34 +274,6 @@
                                                     <ul className="pagination"> </ul>
                                                 </div>
                                             </td>
-
-                                            <div id="add-contact" className="modal fade in" tabIndex="-1" role="dialog"
-                                                aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div className="modal-dialog">
-                                                    <div className="modal-content">
-                                                        <div className="modal-header">
-                                                            <h4 className="modal-title" id="myModalLabel">查询</h4>
-                                                            <button type="button" className="close" data-dismiss="modal"
-                                                                aria-hidden="true">×</button>
-                                                        </div>
-                                                        <div className="modal-body">
-                                                            <form className="form-horizontal form-material">
-                                                                <div className="form-group">
-                                                                    <div className="col-md-12 m-b-20">
-                                                                        <input type="text" className="form-control"
-                                                                            placeholder="用户名" /> </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div className="modal-footer">
-                                                            <button type="button" className="btn btn-info waves-effect"
-                                                                data-dismiss="modal">确认</button>
-                                                            <button type="button" className="btn btn-default waves-effect"
-                                                                data-dismiss="modal">取消</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </tr>
                                     </tfoot>
                                 </table>

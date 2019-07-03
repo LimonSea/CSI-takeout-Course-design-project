@@ -122,21 +122,18 @@
       console.log (item)
       return (
         <tr>
-            <td>{item.id}</td>
+            <td>{item.orderid}</td>
             <td>
-                {item.ordertime}
+                {item.tradingtime}
             </td>
             <td>
-               {item.state}
+               {item.orderstate === 1 ? '已下单' : '暂无信息'}
             </td>
             <td>
-                {item.total}
+                {item.totalprice}
             </td>
             <td>
-                <a href={item.detail}>详细信息</a>
-            </td>
-            <td>
-                <a href="">{item.deal}</a>
+                <a href={"user-order.html?orderid="+item.orderid}>查看</a>
             </td>
         </tr>
       )
@@ -145,113 +142,35 @@
       constructor(props) {
         super(props)
         this.state = {
-          orders: [
-            {
-              id: 1,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id: 3,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id: 4,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            },
-            {
-                id:2,
-              ordertime: '2019-07-02',
-              state: '处理',
-              total: 999,
-              detail: 'user-order.html',
-              deal:'收货'
-            }
-          ]
+          orders: [{
+            orderid: 1,
+            tradingtime: '2019/07/02这一行是写死的',
+            orderstate: 1,
+            totalprice: 34.8
+          }]
         }
       }
       componentDidMount() {
-        // 获取商品列表
-        // $.ajax({
-        //   type: 'POST',
-        //   url: global.targetUrl,
-        //   data: {
-        //     ''
-        //   },
-        //   success: function (res) {
-        //     console.log('返回的',res)
-        //     if (res.resultMsg.code === 1000) {
-        //       location.href = "menu.html";
-        //     }
-        //   }
-        // })
+        // 获取订单列表
+        let that = this
+        $.ajax({
+          type: 'POST',
+          url: global.targetUrl + 'user/getorderlist',
+          headers: {
+            token: localStorage.token 
+          },
+          data: {
+            'currentpage': 0
+          },
+          success: function (res) {
+            console.log('返回的',res)
+            if (res.resultMsg.code === 1000) {
+              that.setState({
+                orders: res.bean.pojo
+              })
+            }
+          }
+        })
       }
       render() {
         return (
@@ -262,8 +181,7 @@
                     <th>订单时间</th>
                     <th>订单状态</th>
                     <th>总额</th>
-                    <th>详细</th>
-                    <th>处理</th>
+                    <th>详细信息</th>
                 </tr>
               </thead>
               <tbody>
@@ -271,7 +189,7 @@
                   this.state.orders.map(item => 
                     <OrderItem 
                       order = {item}
-                      key = {item.id}
+                      key = {item.orderid}
                     />
                   )
                 }

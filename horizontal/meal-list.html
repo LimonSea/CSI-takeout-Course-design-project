@@ -47,7 +47,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
                                     <li><a href="#"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
@@ -70,7 +70,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -168,33 +168,100 @@
     <script src="js/footable-init.js"></script>
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
     <script type="text/babel">
-    // function Mealitem(props) {
-    //     const item = props.meal
-    //     console.log (item)
-    //     return(
-            
 
-    //     )
-        
-        
-
-    // }
 
     class MealList extends React.Component{
         constructor(props) {
             super(props)
             this.state = {                            
                 meals: [
-                {
-                    id: 1,
-                    mealtype: '川菜',
-                    mealname: '麻婆豆腐',
-                    msg: '很好',
-                    price: '16',
-                    file:'form-upload.html'
-                }
+                // {
+                //     id: 1,
+                //     mealtype: '川菜',
+                //     mealname: '麻婆豆腐',
+                //     price: '16',
+                //     file:'form-upload.html'
+                // }
               ]
             }
+        }
+        componentDidMount() {
+                // 获取菜品列表
+                const that = this
+                $.ajax({
+                    type: 'GET',
+                    async: false,
+                    url: global.targetUrl + 'getmeallist',
+                    headers: {
+                        token: localStorage.token 
+                    },
+                    data: {
+                        'currentpage': 0,
+                        'mealstate':1
+                       
+                    },
+                    success: function (res) {
+                        console.log('返回的',res)
+                        
+                        if (res.resultMsg.code === 1000) {
+                            let num = res.bean.totalpage
+                            let meals = res.bean.pojo
+                            for (let i = 1; i < num; i++) {
+                                $.ajax({
+                                    type: 'GET',
+                                    async: false,
+                                    url: global.targetUrl + 'getmeallist',
+                                    headers: {
+                                        token: localStorage.token 
+                                    },
+                                    data: {
+                                        'currentpage': i,
+                                        'mealstate':1
+                                    },
+                                    success: function (ress) {
+                                        console.log('分页 ', ress)
+                                        if (ress.resultMsg.code === 1000) {
+                                            meals = meals.concat(ress.bean.pojo)
+                                        }
+                                    }
+                                })
+                            }
+                            that.setState({
+                                meals: meals
+                            })
+                        }
+                    }
+                })
+
+        }
+        // 删除一条菜品信息
+        delete(mealid){
+            console.log('mealid:',mealid)
+            // 根据userid删除管理员
+            const that = this;
+           
+            $.ajax({
+                type: 'POST',
+                url: global.targetUrl + 'manager/updatemealstate',
+                headers: {
+                    token: localStorage.token 
+                },
+                data: {
+                    mealid:mealid,
+                    state:-1
+                },
+                success: function (res) {
+                    console.log('请求删除',res)
+                    if (res.resultMsg.code === 1000) {
+                        alert('删除成功')
+                        that.componentDidMount()
+                    }
+                },
+                error:function(){
+                    console.log("接收失败！")
+                }
+            })
+
         }
         render(){
             return(
@@ -209,7 +276,6 @@
                                             <th>序号</th>
                                             <th>菜系名称</th>
                                             <th>菜名</th>
-                                            <th>摘要</th>
                                             <th>价格</th>
                                             <th>编辑</th>
                                             <th>图片</th>
@@ -219,16 +285,15 @@
                                     <tbody>
                                             {
                                                 this.state.meals.map(item => {return(
-                                                    <tr key={item.id}>
-                                                        <td>{item.id}</td>
-                                                        <td>{item.mealtype}</td>
+                                                    <tr key={item.mealid}>
+                                                        <td>{item.mealid}</td>
+                                                        <td>{item.typename}</td>
                                                         <td>{item.mealname}</td>
-                                                        <td>{item.msg}</td>
-                                                        <td>{item.price}</td>
-                                                        <td ><a href={'manager-meal.html?mealid='+item.id}> 编辑</a></td>
-                                                        <td><a href={item.file}>上传</a></td>
+                                                        <td>{item.mealprice}</td>
+                                                        <td ><a href={'manager-meal.html?mealid='+item.mealid+'&typename='+item.typename+'&mealname='+item.mealname+'&mealprice='+item.mealprice}> 编辑</a></td>
+                                                        <td><a href={'form-upload.html?mealid='+item.mealid}>上传</a></td>
                                                         <td>
-                                                            <button type="button" className="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i className="ti-close" aria-hidden="true"></i></button>
+                                                            <button type="button" onClick={this.delete.bind(this, item.mealid)} className="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn" data-toggle="tooltip" data-original-title="Delete"><i className="ti-close" aria-hidden="true"></i></button>
                                                         </td>
                                                     </tr>
                                                     ) }

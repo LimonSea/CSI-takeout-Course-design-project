@@ -111,7 +111,73 @@
     </script>
     <script type="text/babel">
     class UserOrder extends React.Component{
-
+      constructor(props) {
+        super(props)
+        this.state = {
+          carts: [{
+            cartid: 1,
+            mealname: '写死的',
+            mealprice: 34.8,
+            count: 1
+          }]
+        }
+      }
+      componentDidMount() {
+        let that = this
+        // 获取上个页面传递的参数
+        let url = location.search
+        let str, orderid
+        if (url.indexOf('?') !== -1) {
+          str = url.substr(1)
+          orderid = str.split('=')[1]
+        }
+        // 获取菜品详情列表
+        $.ajax({
+            type: 'POST',
+            async: false,
+            url: global.targetUrl + 'user/getcartlist',
+            headers: {
+               token: localStorage.token 
+            },
+            data: {
+              'orderid': orderid,
+              'currentpage': 0
+            },
+            success: function (res) {
+                console.log('返回的',res)
+                if (res.resultMsg.code === 1000) {
+                    let num = res.bean.totalpage
+                    let carts = res.bean.pojo
+                    for (let i = 1; i < num; i++) {
+                        $.ajax({
+                            type: 'GET',
+                            async: false,
+                            url: global.targetUrl + 'user/getcartlist',
+                            headers: {
+                                token: localStorage.token 
+                            },
+                            data: {
+                                'orderid': orderid,
+                                'currentpage': i
+                            },
+                            success: function (ress) {
+                                console.log('分页 ', ress)
+                                if (ress.resultMsg.code === 1000) {
+                                  carts = carts.concat(ress.bean.pojo)
+                                }
+                            }
+                        })
+                    }
+                    that.setState({
+                      carts: carts
+                    })
+                }
+            },
+            error:function(){
+                console.log("接收失败！")
+            }
+        })
+      }
         render(){
             return (
                 <div className="container-fluid">
@@ -130,90 +196,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>
-                                                10.20
-                                            </td>
-                                            <td>
-                                                处理
-                                            </td>
-                                            <td>
-                                                1
-                                            </td>
-                                        </tr>
+                                      {this.state.carts.map(item => {
+                                        return (
+                                          <tr key={item.cartid}>
+                                              <td>{item.cartid}</td>
+                                              <td> {item.mealname} </td>
+                                              <td> {item.mealprice} </td>
+                                              <td> {item.count} </td>
+                                          </tr>
+                                        )
+                                      })}
                                         <div className="form-group">
                                         </div>
                                     </tbody>

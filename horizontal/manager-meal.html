@@ -46,7 +46,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
                                     <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
@@ -69,7 +69,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -111,29 +111,6 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <!-- <div class="card-body">
-                                <form class="form-material m-t-40">
-                                    <div class="form-group">
-                                        <label>菜名 <span class="help"></span></label>
-                                        <input type="text" class="form-control form-control-line" > </div>
-                                    <div class="form-group">
-                                        <label>菜系 <span class="help"></span></label>
-                                        <input type="text" class="form-control"> </div>
-                                    <div class="form-group">
-                                        <label>摘要</label>
-                                        <input type="text" class="form-control"> </div>
-                                    <div class="form-group">
-                                        <label>介绍</label>
-                                        <input type="text" class="form-control" > </div>
-                                    <div class="form-group">
-                                        <label>价格</label>
-                                        <input type="text" class="form-control"> </div>
-                                </form>
-								<div class="form-group">
-                                    <center><button onClick="myClick()" class="btn btn-success">提交</button>
-                                        <button onClick="myClick()" class="btn btn-secondary">返回</button></center>
-                                </div>
-                            </div> -->
                             <!-- 组件 -->
                             <div id="managerMeal"></div>
                           </div>
@@ -155,8 +132,10 @@
         constructor(props) {
           super(props)
           this.state = {
-            phone: '',
-            password: ''
+            mealid:'',
+            typename: '',
+            mealname: '',
+            mealprice: ''
           }
           this.handleChange = this.handleChange.bind(this)
           this.submitMeal = this.submitMeal.bind(this)
@@ -168,66 +147,70 @@
         submitMeal() {
           $.ajax({
             type: 'POST',
-            url: global.targetUrl + 'manager/updatemeal',
+            url: global.targetUrl + 'manager/updatemealprice',
             headers: {
               token: localStorage.token 
             },
             data: {
-              'mealname': this.state.mealname,
-              'typename': this.state.typename,
-              'mealprice': this.state.mealprice
+                'mealid':this.state.mealid,
+                'mealprice': this.state.mealprice
             },
             success: function (res) {
               console.log('返回的',res)
               if (res.resultMsg.code === 1000) {
-                // location.href = "menu.html";
+                    alert("修改成功！");
+                    location.href = "meal-list.html";
               }
             }
           })
         }
         componentDidMount() {
-          console.log('token', localStorage.token)
-          // 获取菜品信息
-          $.ajax({
-            type: 'POST',
-            url: global.targetUrl + 'getmealmsg',
-            headers: {
-              token: localStorage.token 
-            },
-            data: {
-              'mealid': 1
-            },
-            success: function (res) {
-              console.log('返回的',res)
-              if (res.resultMsg.code === 1000) {
-                // location.href = "menu.html";
-                // this.setState({
-                //   meals: res.bean.pojo
-                // })
+            var strs;
+            var url = location.search;//获取url中“?”符后的字符串
+            var theRequest = new Object();
+            if (url.indexOf('?') != -1) {
+              var str = url.substr(1);
+              strs = str.split('&');
+              for (var i = 0;i < strs.length; i++) {
+              theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
               }
             }
-          })
+            console.log(theRequest)
+            var mealid = theRequest.mealid;
+            var typename = theRequest.typename;
+            var mealname = theRequest.mealname;
+            var mealprice = theRequest.mealprice;
+            this.setState({
+                mealid :mealid,
+                typename:typename,
+                mealname:mealname,
+                mealprice:mealprice
+            })
+            console.log('菜品ID：'+ mealid)
+            console.log('菜系名称：'+ typename)
+            console.log('菜品名称：'+ mealname)
+            console.log('菜品价格：'+mealprice)
         }
-        render() {
-          var mealname = this.state.mealname
+        render() { 
           var typename = this.state.typename
+          var mealname = this.state.mealname
           var mealprice = this.state.mealprice
           return (
             <div className="card-body">
               <form className="form-material m-t-40">
                   <div className="form-group">
-                      <label>菜名 <span className="help"></span></label>
-                      <input type="text" className="form-control form-control-line" name="mealname" value={mealname} onChange={this.handleChange}/> </div>
+                      <label>菜系:<span className="help"></span></label>
+                      <span className="form-control" name="typename">{typename}</span> </div>
                   <div className="form-group">
-                      <label>菜系 <span className="help"></span></label>
-                      <input type="text" className="form-control" name="typename" value={typename} onChange={this.handleChange}/> </div>
+                      <label>菜名:<span className="help"></span></label>
+                      <span className="form-control" name="mealname">{mealname}</span> </div>
                   <div className="form-group">
                       <label>价格</label>
                       <input type="text" className="form-control" name="mealprice" value={mealprice} onChange={this.handleChange}/> </div>
               </form>
               <div className="form-group">
                   <center><button onClick={this.submitMeal} className="btn btn-success">提交</button>
-                      <a href="" className="btn btn-secondary">返回</a></center>
+                      <a href="meal-list.html" className="btn btn-secondary">返回</a></center>
               </div>
             </div>
           )

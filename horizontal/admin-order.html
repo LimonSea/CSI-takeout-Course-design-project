@@ -27,6 +27,9 @@
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
     <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-collapse">
@@ -50,7 +53,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
                                     <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="admin-order-list.html"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
@@ -73,7 +76,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -135,55 +138,45 @@
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
 
     <script type="text/babel">
-    function OrderItem(props){
-        const item = props.order
-        console.log(item)
-        return (
-            <tr>
-                <td className="xuhao">{item.mealtype}</td>
-                <td>{item.meal}</td>
-                <td>{item.price}</td>
-                <td>{item.num}</td>
-            </tr>
-
-        )
-    }
     class AdminOrder  extends React.Component{
         constructor(props) {
             super(props)
             this.state = {
-                orders: [
-                {
-                    id: 1,
-                    mealtype: '川菜',
-                    meal: '麻婆豆腐',
-                    price: '40',
-                    num:'12'
-                },
-                {
-                    id: 2,
-                    mealtype: '川菜',
-                    meal: '麻婆豆腐',
-                    price: '40',
-                    num:'12'
-                },
-                {
-                    id: 3,
-                    mealtype: '川菜',
-                    meal: '麻婆豆腐',
-                    price: '40',
-                    num:'12'
-                },
-                {
-                    id: 4,
-                    mealtype: '川菜',
-                    meal: '麻婆豆腐',
-                    price: '40',
-                    num:'12'
-                }
-              ]
+            admins: []
             }
         }
+        componentDidMount() {
+        // 获取上个页面传递的参数
+        let url = location.search
+        console.log(url)
+        let str, orderid
+        if (url.indexOf('?') !== -1) {
+          str = url.substr(1)
+          orderid = str.split('=')[1]
+        }
+        // 获取菜品详情列表
+        let that = this
+          $.ajax({
+            type: 'POST',
+            url: global.targetUrl + 'user/getcartlist',
+            headers: {
+              token: localStorage.token 
+            },
+            data: {
+              'orderid': orderid,
+              'currentpage': 0
+            },
+            success: function (res) {
+              console.log('返回的',res)
+              console.log('orderid',orderid)
+              if (res.resultMsg.code === 1000) {
+                that.setState({
+                    admins: res.bean.pojo
+                })
+              }
+            }
+          })
+      }
         render(){
             return (
                 <div className="row">
@@ -194,21 +187,25 @@
                                     data-page-size="10">
                                     <thead>
                                         <tr>
-                                            <th>菜系</th>
+                                            <th>编号</th>
                                             <th>菜品</th>
                                             <th>单价</th>
                                             <th>数量</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {
-                                            this.state.orders.map(item => 
-                                                <OrderItem 
-                                                order = {item}
-                                                key = {item.id}
-                                                />
-                                            )
-                                        }
+                                      {this.state.admins.map(item => {
+                                        return (
+                                          <tr key={item.cartid}>
+                                              <td>{item.cartid}</td>
+                                              <td> {item.mealname} </td>
+                                              <td> {item.mealprice} </td>
+                                              <td> {item.count} </td>
+                                          </tr>
+                                        )
+                                      })}
+                                        <div className="form-group">
+                                        </div>
                                     </tbody>
                                     <tfoot>
                                         <tr>

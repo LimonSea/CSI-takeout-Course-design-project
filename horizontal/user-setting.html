@@ -109,42 +109,51 @@
       constructor(props) {
         super(props)
         this.state = {
-          realname: '',
-          mail: '',
-          phone:'',
+          name: '',
           address:''
         }
         this.handleChange = this.handleChange.bind(this)
         this.submit = this.submit.bind(this)
       }
       handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({ [event.target.name]: event.target.value })
         console.log(event.target.name, event.target.value)
       }
       submit(event) {
+        let that = this
         $.ajax({
           type: 'POST',
-          url: global.targetUrl+'manager/addmeal',
+          url: global.targetUrl + 'user/updateusermsg',
+          headers: {
+            token: localStorage.token 
+          },
           data: {
-            'realname': this.state.realname,
-            'mail': this.state.mail,
-            'phone':this.state.phone,
+            'name': this.state.name,
             'address':this.state.address
           },
           success: function (res) {
             console.log('返回的',res)
             if (res.resultMsg.code === 1000) {
-              location.href = "menu.html";
+              // location.href = "menu.html"
+              alert('修改成功')
+              localStorage.setItem('name', that.state.name)
+              localStorage.setItem('address', that.state.address)
             }
           }
         })
         console.log(global.targetUrl)
       }
+      componentDidMount() {
+        // 获取用户信息
+        let that = this
+        that.setState({
+          name: localStorage.name,
+          address: localStorage.address
+        })
+      }
       render() {
-        var realname = this.state.realname;
-        var mail = this.state.mail;
-        var phone = this.state.phone;
-        var address = this.state.address;
+        var name = this.state.name
+        var address = this.state.address
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -153,17 +162,11 @@
                             <div className="card-body">
                                 <form className="form-material m-t-40">
                                     <div className="form-group">
-                                        <label>真实姓名：<span className="help"></span></label>
-                                        <input type="text" className="form-control form-control-line" name="realname" value={this.realname} onChange={this.handleChange}/> </div>
-                                    <div className="form-group">
-                                        <label>电子邮箱：<span className="help"></span></label>
-                                        <input type="text" className="form-control" name="mail" value={this.mail} onChange={this.handleChange}/> </div>
-                                    <div className="form-group">
-                                        <label>手机号码：</label>
-                                        <input type="text" className="form-control" name="phone" value={this.phone} onChange={this.handleChange}/> </div>
+                                        <label>昵称：<span className="help"></span></label>
+                                        <input type="text" className="form-control form-control-line" name="name" value={name} onChange={this.handleChange}/> </div>
                                     <div className="form-group">
                                         <label>送货地址：</label>
-                                        <input type="text" className="form-control" name="address" value={this.address} onChange={this.handleChange}/> </div>
+                                        <input type="text" className="form-control" name="address" value={address} onChange={this.handleChange}/> </div>
                                 </form>
                                 <div className="form-group">
                                     <center><button onClick={this.submit} className="btn btn-success">提交</button></center>

@@ -52,7 +52,7 @@
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="style-cooking.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
+                                    <li><a href="mealtype.html"><i class="mdi mdi-book-open-variant"></i>菜系管理</a></li>
                                     <li><a href="meal-list.html"><i class=" mdi mdi-clipboard-text"></i>菜品管理</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#"><i class="mdi mdi-cart-outline"></i> 订单管理</a></li>
@@ -75,7 +75,7 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="has-arrow waves-effect waves-dark" href="style-cooking.html"
+                        <li> <a class="has-arrow waves-effect waves-dark" href="mealtype.html"
                                 aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span
                                     class="hide-menu">菜系管理</span></a>
                         </li>
@@ -136,60 +136,63 @@
     <!-- ============================================================== -->
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
     <script type="text/babel">
-    function OrderItem(props){
-        const item = props.order
-        console.log(item)
-        return (
-            <tr>
-                <td className="xuhao">{item.id}</td>
-                <td>{item.orderTime}</td>
-                <td>{item.state}</td>
-                <td>{item.price}</td>
-                <td>
-                    <a href={item.detail} >详细信息 </a>
-                </td>
-            </tr>
-
-        )
-    }
+   
     class AdminOrderList extends React.Component{
         constructor(props) {
             super(props)
             this.state = {
-                orders: [
-                {
-                    id: 1,
-                    orderTime: '2019-06-25 15:00:00',
-                    state: '已处理',
-                    price: '40',
-                    detail: 'admin-order.html'
-                },
-                {
-                    id: 2,
-                    orderTime: '2019-06-25 15:00:00',
-                    state: '已处理',
-                    price: '40',
-                    detail: 'admin-order.html'
-                },
-                {
-                    id: 3,
-                    orderTime: '2019-06-25 15:00:00',
-                    state: '已处理',
-                    price: '40',
-                    detail: 'admin-order.html'
-                },
-                {
-                    id: 4,
-                    orderTime: '2019-06-25 15:00:00',
-                    state: '已处理',
-                    price: '40',
-                    detail: 'admin-order.html'
-                }
-              ]
+                orders: []
             }
-
         }
-       
+         componentDidMount() {
+            // 管理员获取所有订单列表
+            const that = this;
+            $.ajax({
+                type: 'POST',
+                async: false,
+                url: global.targetUrl + 'user/getorderlist',
+                headers: {
+                        token: localStorage.token 
+                },
+                data: {
+                    'currentpage': 0
+                },
+                success: function (res) {
+                    console.log('返回的',res)
+                    if (res.resultMsg.code === 1000) {
+                        let num = res.bean.totalpage
+                        let orders = res.bean.pojo
+                        for (let i = 1; i < num; i++) {
+                            $.ajax({
+                                type: 'GET',
+                                async: false,
+                                url: global.targetUrl + 'user/getorderlist',
+                                headers: {
+                                    token: localStorage.token 
+                                },
+                                data: {
+                                    'currentpage': i
+                                },
+                                success: function (ress) {
+                                    console.log('分页 ', ress)
+                                    if (ress.resultMsg.code === 1000) {
+                                     orders = orders.concat(ress.bean.pojo)
+                                    }
+                                }
+                            })
+                        }
+                        that.setState({
+                            orders: orders
+                        })
+                        console.log(that.state)
+                    }
+                },
+                error:function(){
+                    console.log("接收失败！")
+                }
+            })
+         }
+        
         render() {
             return(
                 <div className="row">
@@ -209,14 +212,28 @@
                                     </thead>
                                     <tbody>
                                         {
-                                            this.state.orders.map(item => 
-                                                <OrderItem 
-                                                order = {item}
-                                                key = {item.id}
-                                                />
+                                        this.state.orders.map(item => {
+                                            console.log(item)
+                                            return (
+                                                <tr key={item.orderid}>
+                                                    <td>{item.orderid}</td>
+                                                    <td>
+                                                        {item.tradingtime}
+                                                    </td>
+                                                    <td>
+                                                    {item.orderstate === 1 ? '已下单' : '暂无信息'}
+                                                    </td>
+                                                    <td>
+                                                        {item.totalprice}
+                                                    </td>
+                                                    <td>
+                                                        <a href={"admin-order.html?orderid="+item.orderid}>查看</a>
+                                                    </td>
+                                                </tr>
                                             )
+                                            
+                                        })
                                         }
-                                        
                                     </tbody>
                                     <tfoot>
                                         <tr>
