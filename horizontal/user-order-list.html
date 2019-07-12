@@ -29,8 +29,8 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-collapse">
                     <div class="navbar-nav mr-auto mt-md-0">
-                        <div class="nav-item"> <a class="navbar-brand" href="user.html"><img
-                                    src="../assets/images/logo.jpg" class="light-logo" alt="homepage" /></a> </div>
+                        <div class="nav-item"> <a class="navbar-brand" href="https://github.com/LimonSea/CSI-takeout-Course-design-project"><img
+                                    src="../assets/images/logo.png" class="light-logo" alt="homepage" /></a> </div>
                     </div>
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown">
@@ -142,12 +142,14 @@
       constructor(props) {
         super(props)
         this.state = {
-          orders: [{
-            orderid: 1,
-            tradingtime: '2019/07/02这一行是写死的',
-            orderstate: 1,
-            totalprice: 34.8
-          }]
+          orders: [
+          //   {
+          //   orderid: 1,
+          //   tradingtime: '2019/07/02这一行是写死的',
+          //   orderstate: 1,
+          //   totalprice: 34.8
+          // }
+        ]
         }
       }
       componentDidMount() {
@@ -155,18 +157,42 @@
         let that = this
         $.ajax({
           type: 'POST',
+          async: false,
           url: global.targetUrl + 'user/getorderlist',
           headers: {
             token: localStorage.token 
           },
           data: {
-            'currentpage': 0
+            'currentpage': 0,
+            'userid': localStorage.userid
           },
           success: function (res) {
             console.log('返回的',res)
             if (res.resultMsg.code === 1000) {
+              let num = res.bean.totalpage
+              let orders = res.bean.pojo
+              for (let i = 1; i < num; i++) {
+                  $.ajax({
+                      type: 'POST',
+                      async: false,
+                      url: global.targetUrl + 'user/getorderlist',
+                      headers: {
+                        token: localStorage.token 
+                      },
+                      data: {
+                        'currentpage': i,
+                        'userid': localStorage.userid
+                      },
+                      success: function (ress) {
+                          console.log('分页 ', ress)
+                          if (ress.resultMsg.code === 1000) {
+                              orders = orders.concat(ress.bean.pojo)
+                          }
+                      }
+                  })
+              }
               that.setState({
-                orders: res.bean.pojo
+                orders: orders
               })
             }
           }

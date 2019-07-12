@@ -97,6 +97,10 @@
       }
       register(event) {
         console.log(this.state.confirmPassword === this.state.password)
+        if (this.state.phone === '' || this.state.password === '' || this.state.confirmPassword === '') {
+          alert('请填写全部字段')
+          return
+        }
         if (this.state.confirmPassword === this.state.password) {
           $.ajax({
             type: 'POST',
@@ -109,6 +113,9 @@
               console.log('返回的',res)
               if (res.resultMsg.code === 1000) {
                 location.href = "login.html"
+              }
+              else {
+                alert(res.resultMsg.message)
               }
             }
           })
@@ -124,7 +131,7 @@
             <h3 className="box-title m-b-20">注册</h3>
             <div className="form-group">
               <div className="col-xs-12">
-                <input className="form-control" type="text" required="" placeholder="手机号" name="phone" value={phone} onChange={this.handleChange} />
+                <input className="form-control" type="text" required="" placeholder="手机号" name="phone" value={phone} onChange={this.handleChange}/>
               </div>
             </div>
             <div className="form-group ">
@@ -148,7 +155,7 @@
             <div className="form-group text-center m-t-20">
               <div className="col-xs-12">
                 <button className="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
-                 onClick={this.register}>注册</button>
+                onClick={this.register}>注册</button>
               </div>
             </div>
             <div className="form-group m-b-0">

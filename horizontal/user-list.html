@@ -32,8 +32,8 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-collapse">
                     <div class="navbar-nav mr-auto mt-md-0">
-                        <div class="nav-item"> <a class="navbar-brand" href="admin.html"><img
-                                    src="../assets/images/logo.jpg" class="light-logo" alt="homepage" /></a> </div>
+                        <div class="nav-item"> <a class="navbar-brand" href="https://github.com/LimonSea/CSI-takeout-Course-design-project"><img
+                                    src="../assets/images/logo.png" class="light-logo" alt="homepage" /></a> </div>
                     </div>
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown">
@@ -183,7 +183,6 @@
                         }
                     }
                 })
-
             }
             delete (userid){
                 console.log('userid:',userid)
@@ -209,7 +208,6 @@
                         console.log("接收失败！")
                     }
                 })
-
             }
         
             render(){
@@ -229,25 +227,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                {
+                                            {
                                                 this.state.users.map(item => {
                                                     return (
                                                         <tr key={item.userid}>
                                                             <td className="xuhao">{item.userid}</td>
                                                             <td>{item.name}</td>
                                                             <td>
-                                                            <a onClick={this.delete.bind(this, item.userid)}>
+                                                            <a href='#' onClick={this.delete.bind(this, item.userid)}>
                                                                 删除</a>
                                                             </td>
                                                         </tr>
-
                                                     )
-                                                    
-                                                }
-                                               
-                                                )
+                                                })
                                             }
-                                        
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -265,12 +258,9 @@
                             </div>
                         </div>
                     </div>
-                
-
                 )
             }
         }
-    
         ReactDOM.render (
           <UserList />,
           document.getElementById('userList')
